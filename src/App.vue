@@ -87,33 +87,49 @@ export default {
             tasks: [],
             taskInput: null,
             isSearch: false,
-            searchInput:null
+            searchInput: null
+        }
+    },
+    mounted() {
+        // Retrieve tasks from local storage on component mount
+        const savedTasks = localStorage.getItem('tasks');
+        if (savedTasks) {
+            this.tasks = JSON.parse(savedTasks);
         }
     },
     methods: {
         addTask() {
             this.tasks.push({
-                    value: this.taskInput,
-                    isComplete: false
-                }),
-                this.taskInput = null
+                value: this.taskInput,
+                isComplete: false
+            });
+            this.taskInput = null;
+
+            // Save tasks to local storage
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
         },
         removeTask(index) {
             this.tasks.splice(index, 1);
+
+            // Save tasks to local storage after removing
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
         },
         clear() {
-            this.tasks = []
+            this.tasks = [];
+
+            // Save tasks to local storage after clearing
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
         }
     },
     computed: {
         taskList() {
             if (this.searchInput) {
-                return this.tasks.filter(task => task.value.indexOf(this.searchInput) !==  -1);
+                return this.tasks.filter(task => task.value.indexOf(this.searchInput) !== -1);
             } else {
                 return this.tasks;
             }
         }
     }
-
 }
 </script>
+
