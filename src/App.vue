@@ -53,7 +53,7 @@
         <div class="mt-5 space-y-1">
             <!-- single TAsk -->
             <div v-for="(task,index) in taskList" :key="index" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 rounded flex items-center group">
-                <input v-model="task.isComplete" :value="true" type="checkbox" class="w-4 h-4 rounded text-indigo-500 cursor-pointer" />
+                <input @change="saveTaskStatus()" v-model="task.isComplete" :value="true" :checked="task.isComplete" type="checkbox" class="w-4 h-4 rounded text-indigo-500 cursor-pointer" />
                 <span class="text-gray-800 ml-3" :class="{'line-through' : task.isComplete}">{{ task.value }}</span>
                 <button @click="removeTask(index)" class="text-red-500 ml-auto group-hover:block hidden hover:text-red-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,6 +96,7 @@ export default {
         if (savedTasks) {
             this.tasks = JSON.parse(savedTasks);
         }
+
     },
     methods: {
         addTask() {
@@ -105,6 +106,10 @@ export default {
             });
             this.taskInput = null;
 
+            // Save tasks to local storage
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        },
+        saveTaskStatus() {
             // Save tasks to local storage
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
         },
@@ -128,8 +133,9 @@ export default {
             } else {
                 return this.tasks;
             }
-        }
-    }
+        },
+
+    },
+
 }
 </script>
-
